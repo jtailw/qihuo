@@ -15,7 +15,7 @@ DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 LOGADDR = '{}.log'.format(time.strftime(DATE_FORMAT, time.localtime()))
 logging.basicConfig(filename=LOGADDR,level = logging.INFO, format=LOG_FORMAT,datefmt=DATE_FORMAT)
 
-#导入配置文件
+#导入配置文件内容
 try:
     cf = configparser.ConfigParser()
     cf.read('config.ini')
