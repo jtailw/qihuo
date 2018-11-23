@@ -8,12 +8,6 @@ import requests
 import time
 import configparser
 import logging
-import logging.config
-import os
-path = os.getcwd()
-path = '{}{}'.format(path,'LOG')
-logging.config.fileConfig(path)
-
 
 # 设置LOG打印信息
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s - %(lineno)d行"
