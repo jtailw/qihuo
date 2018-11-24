@@ -60,8 +60,8 @@ class Db(object):
     global DB
     #初始化DB，初始化当前的操作表
     def __init__(self,TableName,string = 0):
-        self.string = string
         self.TableName = TableName
+        self.string = string
 
     #返回当前数据库最新一条信息的时间戳
     def GetMaxTime(self):
@@ -72,7 +72,7 @@ class Db(object):
     #插入数据到数据库操作(5/15/30/60日操作方式)
     def InsertDb(self,list):
         if self.string == 0:
-            InsertData = "INSERT INTO {}(time, open_price, max_price, close_price, min_price, volume) " \
+            InsertData = "INSERT INTO {}(time, open_price, max_price, min_price, close_price, volume) " \
                          "VALUES ('{}', '{}', '{}', '{}', '{}', '{}' )".format(self.TableName,list[0],int(list[1].split(".")[0]), int(list[2].split(".")[0]), int(list[3].split(".")[0]), int(list[4].split(".")[0]), int(list[5]))
             logging.info('>>>>>>>内容存储到数据库：{}；存储数据表：{}'.format(list,self.TableName))
             cursor.execute(InsertData)
@@ -82,6 +82,10 @@ for k,v in cf.items('url'): # k 数据库表名   v 下载连接
     dt = download(v)
     db = Db(k)
     db_maxtime = db.GetMaxTime()
+    if db_maxtime == None:  #判断是否可取到数据库时间数据，如时间数据为空，则取默认值 = 0
+        db_maxtime = 0
+    else:
+        pass
     for i in dt:
         dt_time = TimeTransform(i[0])
         if  dt_time > db_maxtime:
