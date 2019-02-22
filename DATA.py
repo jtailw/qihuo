@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # -*- coding:utf-8 -*-
 
 __author__ = 'william'
@@ -103,6 +103,6 @@ if n_list == {}:
 else:
     print('---数据库插入记录---')
     for k,v in n_list:
-        print('{}:{}条'.format(k,v))
+        print('{}: {}条'.format(k,v))
     print('------------------')
 DB.close()
