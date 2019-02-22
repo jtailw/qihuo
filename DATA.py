@@ -32,7 +32,7 @@ try:
     logging.info('数据库连接成功！')
 except Exception as e:
     logging.error('数据库连接错误，程序退出！！错误信息：{}'.format(e))
-    raise ValueError
+    raise ValueError('DataBase init faild!!!!')
 
 #下载网页数据
 def download(url):
@@ -42,7 +42,7 @@ def download(url):
         return eval(response.text)  #返回一个格式化结果
     except Exception as e:
         logging.error('URL格式化错误，URL:{} 错误信息：{}'.format(url,e))
-        raise ValueError #格式化错误，返回一個ValueError
+        raise ValueError('Create URL request favid!!!') #格式化错误，返回一個ValueError
 
 # 时间处理（将一个stricttime转化为一个时间戳）
 def TimeTransform(timestring):
@@ -53,7 +53,7 @@ def TimeTransform(timestring):
             return time.mktime(time.strptime(timestring, '%Y-%m-%d %H:%M:%S'))
         except Exception as e:
             logging.debug('给处的stricttime有问题，转化失败！！stricttime:{}错误信息;{}'.format(timestring,e))
-            raise ValueError  # 抛出一个value错误
+            raise ValueError('TimeTransform faild!!!!')  # 抛出一个value错误
 
 #进行数据库操作
 class Db(object):
@@ -78,6 +78,8 @@ class Db(object):
             cursor.execute(InsertData)
             DB.commit()
 
+n_list = {}  #插入数据库条数记录
+
 for k,v in cf.items('url'): # k 数据库表名   v 下载连接
     dt = download(v)
     db = Db(k)
@@ -90,7 +92,17 @@ for k,v in cf.items('url'): # k 数据库表名   v 下载连接
         dt_time = TimeTransform(i[0])
         if  dt_time > db_maxtime:
             db.InsertDb(i)
+            if k in n_list:
+                n_list[k] = n_list[k] + 1
+            else:
+                n_list[k] = 1
         else:
             pass
-
+if n_list == {}:
+    print('无新增内容！')
+else:
+    print('---数据库插入记录---')
+    for k,v in n_list:
+        print('{}:{}条'.format(k,v))
+    print('------------------')
 DB.close()
