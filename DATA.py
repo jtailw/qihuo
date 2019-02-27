@@ -99,10 +99,10 @@ for k,v in cf.items('url'): # k 数据库表名   v 下载连接
         else:
             pass
 if n_list == {}:
-    print('无新增内容！')
+    print('-----------\n 无新增内容\n-----------')
 else:
     print('---数据库插入记录---')
-    for k,v in n_list:
-        print('{}: {}条'.format(k,v))
+    for k,v in n_list.items():
+        print('  {}: {}条'.format(k,v))
     print('------------------')
 DB.close()
