@@ -78,7 +78,7 @@ class Db(object):
             cursor.execute(InsertData)
             DB.commit()
 
-n_list = {}  #插入数据库条数记录
+n_list = {}  # 插入数据库条数记录
 
 for k,v in cf.items('url'): # k 数据库表名   v 下载连接
     dt = download(v)
