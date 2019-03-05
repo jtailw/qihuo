@@ -65,15 +65,14 @@ class Db(object):
 
     #返回当前数据库最新一条信息的时间戳
     def GetMaxTime(self):
-        maxtime = 'select unix_timestamp(max(TIME)) from {}'.format(self.TableName)
+        maxtime = cf.get('dborder','getmaxtime').format(self.TableName)
         cursor.execute(maxtime)
         return cursor.fetchall()[0][0]
 
     #插入数据到数据库操作(5/15/30/60日操作方式)
     def InsertDb(self,list):
         if self.string == 0:
-            InsertData = "INSERT INTO {}(time, open_price, max_price, min_price, close_price, volume) " \
-                         "VALUES ('{}', '{}', '{}', '{}', '{}', '{}' )".format(self.TableName,list[0],int(list[1].split(".")[0]), int(list[2].split(".")[0]), int(list[3].split(".")[0]), int(list[4].split(".")[0]), int(list[5]))
+            InsertData = cf.get('dborder','insetdata').format(self.TableName,list[0],int(list[1].split(".")[0]), int(list[2].split(".")[0]), int(list[3].split(".")[0]), int(list[4].split(".")[0]), int(list[5]))
             logging.info('>>>>>>>内容存储到数据库：{}；存储数据表：{}'.format(list,self.TableName))
             cursor.execute(InsertData)
             DB.commit()
@@ -98,11 +97,12 @@ for k,v in cf.items('url'): # k 数据库表名   v 下载连接
                 n_list[k] = 1
         else:
             pass
-if n_list == {}:
-    print('-----------\n 无新增内容\n-----------')
-else:
-    print('---数据库插入记录---')
-    for k,v in n_list.items():
-        print('  {}: {}条'.format(k,v))
-    print('------------------')
 DB.close()
+if __name__ =='__main__':
+    if n_list == {}:
+        print('-----------\n 无新增内容\n-----------')
+    else:
+        print('---数据库插入记录---')
+        for k,v in n_list.items():
+            print('  {}: {}条'.format(k,v))
+        print('------------------')

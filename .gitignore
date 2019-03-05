@@ -2,3 +2,4 @@ config.ini
 .idea/
 SAVE/
 LOG/
+__pycache__/
