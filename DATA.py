@@ -82,11 +82,10 @@ n_list = {}  # 插入数据库条数记录
 for k,v in cf.items('url'): # k 数据库表名   v 下载连接
     dt = download(v)
     db = Db(k)
-    db_maxtime = db.GetMaxTime()
-    if db_maxtime == None:  #判断是否可取到数据库时间数据，如时间数据为空，则取默认值 = 0
+    if db.GetMaxTime() == None:  #判断是否可取到数据库时间数据，如时间数据为空，则取默认值 = 0
         db_maxtime = 0
     else:
-        pass
+        db_maxtime = db.GetMaxTime()
     for i in dt:
         dt_time = TimeTransform(i[0])
         if  dt_time > db_maxtime:
@@ -97,7 +96,7 @@ for k,v in cf.items('url'): # k 数据库表名   v 下载连接
                 n_list[k] = 1
         else:
             pass
-DB.close()
+
 if __name__ =='__main__':
     if n_list == {}:
         print('-----------\n 无新增内容\n-----------')
@@ -106,3 +105,5 @@ if __name__ =='__main__':
         for k,v in n_list.items():
             print('  {}: {}条'.format(k,v))
         print('------------------')
+
+DB.close()
