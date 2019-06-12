@@ -22,8 +22,8 @@ try:
     cf.read('config.ini')
     logging.info('导入配置文件成功！')
 except Exception as e:
-    logging.error('导入配置文件错误，程序退出！错误信息：e'.format(e))
-    raise ValueError
+    logging.error('导入配置文件错误，程序退出！错误信息：{}'.format(e))
+    raise ValueError('Config init faild!!!!')
 
 # 连接到数据库  服务器地址，账号，密码，数据库名称(全部配置在配置文件内)
 try:
@@ -77,27 +77,28 @@ class Db(object):
             cursor.execute(InsertData)
             DB.commit()
 
-n_list = {}  # 插入数据库条数记录
-
-for k,v in cf.items('url'): # k 数据库表名   v 下载连接
-    dt = download(v)
-    db = Db(k)
-    if db.GetMaxTime() == None:  #判断是否可取到数据库时间数据，如时间数据为空，则取默认值 = 0
-        db_maxtime = 0
-    else:
-        db_maxtime = db.GetMaxTime()
-    for i in dt:
-        dt_time = TimeTransform(i[0])
-        if  dt_time > db_maxtime:
-            db.InsertDb(i)
-            if k in n_list:
-                n_list[k] = n_list[k] + 1
-            else:
-                n_list[k] = 1
-        else:
-            pass
-
 if __name__ =='__main__':
+
+    n_list = {}  # 插入数据库条数记录
+
+    for k, v in cf.items('url'):  # k 数据库表名   v 下载连接
+        dt = download(v)
+        db = Db(k)
+        if db.GetMaxTime() is None:  # 判断是否可取到数据库时间数据，如时间数据为空，则取默认值 = 0
+            db_MaxTime = 0
+        else:
+            db_MaxTime = db.GetMaxTime()
+        for i in dt:
+            dt_time = TimeTransform(i[0])
+            if dt_time > db_MaxTime:
+                db.InsertDb(i)
+                if k in n_list:
+                    n_list[k] = n_list[k] + 1
+                else:
+                    n_list[k] = 1
+            else:
+                pass
+
     if n_list == {}:
         print('-----------\n 无新增内容\n-----------')
     else:
