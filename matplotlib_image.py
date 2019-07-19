@@ -61,29 +61,35 @@ def timeinput():    #从键盘输入开始时间和结束时间
         endtime = datetime.datetime.today().strftime('%Y-%m-%d')
         return begintime,endtime
 
-dd = Db()
-k,v =timeinput()
-c = dd.getdata(k,v)
-kk = []
-vv1 = []
-vv2 = []
-# vv3 = []
+def DrawPlot():
+    dd = Db()
+    k,v =timeinput()
+    c = dd.getdata(k,v)
+    kk = []
+    vv1 = []
+    vv2 = []
+    # vv3 = []
 
-for k,v1,v2,v3 in c:
-    kk.append(k)
-    vv1.append(v1)
-    vv2.append(v2)
-    # vv3.append(v3)
+    for k,v1,v2,v3 in c:
+        kk.append(k)
+        vv1.append(v1)
+        vv2.append(v2)
+        # vv3.append(v3)
 
-for a,b in zip(kk,vv1):
-    plt.text(a,b,b,ha = 'center',fontsize = 5)
+    for a,b in zip(kk,vv1):
+        plt.text(a,b,b,ha = 'center',fontsize = 5)
 
 
-for a,b in zip(kk,vv2):
-    plt.text(a,b,b,ha = 'center',fontsize = 5)
+    for a,b in zip(kk,vv2):
+        plt.text(a,b,b,ha = 'center',fontsize = 5)
 
-plt.gcf().autofmt_xdate()
-plt.grid()
-plt.plot(kk,vv1)
-plt.plot(kk,vv2)
-plt.show()
+    plt.gcf().autofmt_xdate()
+    plt.grid()
+    plt.plot(kk,vv1)
+    plt.plot(kk,vv2)
+    plt.show()
+    return
+
+
+if __name__ == '__main__':
+    DrawPlot()

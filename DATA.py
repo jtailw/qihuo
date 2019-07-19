@@ -36,12 +36,16 @@ except Exception as e:
 
 #下载网页数据
 def download(url):
-    response = requests.get(url)
-    logging.debug("准备格式化并输出URL内容，URL：{}".format(url))
+    try:
+        response = requests.get(url)
+        logging.debug("准备格式化并输出URL内容，URL：{}".format(url))
+    except Exception as e:
+        logging.error('数据下载出现错误!!,URL:{} 错误信息：{}!'.format(url,e))
+        raise IOError("Get URL request favid!!!!")
     try:
         return eval(response.text)  #返回一个格式化结果
     except Exception as e:
-        logging.error('URL格式化错误，URL:{} 错误信息：{}'.format(url,e))
+        logging.error('URL内容格式化错误，URL:{} 错误信息：{}'.format(url,e))
         raise ValueError('Create URL request favid!!!') #格式化错误，返回一個ValueError
 
 # 时间处理（将一个stricttime转化为一个时间戳）
